@@ -1,2 +1,2 @@
 # MctBot
-Discord economy and games bot written in python.
+Discord economy and games bot written in C#.
