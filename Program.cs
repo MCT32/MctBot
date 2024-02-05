@@ -1,4 +1,7 @@
 ﻿using DisCatSharp;
+using DisCatSharp.ApplicationCommands;
+using DisCatSharp.ApplicationCommands.Attributes;
+using DisCatSharp.ApplicationCommands.Context;
 using DisCatSharp.Enums;
 
 namespace MctBot
@@ -21,14 +24,24 @@ namespace MctBot
                 Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContent
             });
 
-            discord.MessageCreated += async (s, e) =>
-            {
-                if (e.Message.Content.ToLower().StartsWith("ping"))
-                    await e.Message.RespondAsync("pong!");
-            };
+            var appCommands = discord.UseApplicationCommands();
+
+            appCommands.RegisterGlobalCommands<PingCommand>();
 
             await discord.ConnectAsync();
             await Task.Delay(-1);
+        }
+    }
+
+    public class PingCommand : ApplicationCommandsModule
+    {
+        [SlashCommand("ping", "Replies with pong!")]
+        public async Task PingSlashCommand(InteractionContext ctx)
+        {
+            await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DisCatSharp.Entities.DiscordInteractionResponseBuilder()
+            {
+                Content = "Pong!"
+            });
         }
     }
 }

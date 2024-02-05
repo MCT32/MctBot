@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="DisCatSharp" Version="10.6.1" />
+    <PackageReference Include="DisCatSharp.ApplicationCommands" Version="10.6.1" />
     <PackageReference Include="DotNetEnv" Version="3.0.0" />
   </ItemGroup>
 
