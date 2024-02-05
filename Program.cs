@@ -1,5 +1,4 @@
-﻿using System.Data;
-using DisCatSharp;
+﻿using DisCatSharp;
 using DisCatSharp.ApplicationCommands;
 using DisCatSharp.ApplicationCommands.Attributes;
 using DisCatSharp.ApplicationCommands.Context;
@@ -41,6 +40,7 @@ namespace MctBot
 
             appCommands.RegisterGlobalCommands<PingCommand>();
             appCommands.RegisterGlobalCommands<BalanceCommand>();
+            appCommands.RegisterGlobalCommands<RegisterCommand>();
 
             await discord.ConnectAsync();
             await Task.Delay(-1);
@@ -81,6 +81,37 @@ namespace MctBot
                 {
                     Content = $"User {user.GlobalName} has ${balance} in the bank."
                 });
+        }
+    }
+
+    public class RegisterCommand : ApplicationCommandsModule
+    {
+        [SlashCommand("register", "Register yourself to the database.")]
+        public async Task RegisterSlashCommand(InteractionContext ctx)
+        {
+            var postgresBuilder = new NpgsqlDataSourceBuilder();
+            postgresBuilder.ConnectionStringBuilder.Host = System.Environment.GetEnvironmentVariable("PGHOST");
+
+            var postgres = postgresBuilder.Build();
+
+            var result = await postgres.CreateCommand($"SELECT 1 FROM users WHERE id = {ctx.UserId}").ExecuteScalarAsync();
+
+            if (result == null)
+            {
+                await postgres.CreateCommand($"INSERT INTO users VALUES ({ctx.UserId})").ExecuteNonQueryAsync();
+
+                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                {
+                    Content = "You are now registered!"
+                });
+            }
+            else
+            {
+                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                {
+                    Content = "You are already registered!"
+                });
+            }
         }
     }
 }
