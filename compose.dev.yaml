@@ -2,7 +2,7 @@ version: "3.1"
 
 services:
   mctbot:
-    image: ghcr.io/mct32/mctbot:main
+    image: mctbot
     container_name: mctbot
     environment:
       - DISCORD_TOKEN=<put token here>
