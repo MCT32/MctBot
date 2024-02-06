@@ -28,7 +28,7 @@ namespace MctBot
 
             await postgres.CreateCommand(@"CREATE TABLE IF NOT EXISTS users (
                 id bigserial PRIMARY KEY,
-                balance integer NOT NULL DEFAULT 1000
+                balance decimal(15, 2) NOT NULL DEFAULT 1000
             );").ExecuteNonQueryAsync();
 
             var discord = new DiscordClient(new DiscordConfiguration()
@@ -119,8 +119,11 @@ namespace MctBot
     public class TransferCommand : ApplicationCommandsModule
     {
         [SlashCommand("transfer", "Transfer money to another account.")]
-        public async Task TransferSlashCommand(InteractionContext ctx, [Option("user", "User to transfer money to.")] DiscordUser user, [Option("amount", "Amount to transfer"), MinimumValue(1)] int amount)
+        public async Task TransferSlashCommand(InteractionContext ctx, [Option("user", "User to transfer money to.")] DiscordUser user, [Option("amount", "Amount to transfer"), MinimumValue(0.01)] double amount)
         {
+            // Should fix duplication due to precision error, i hope
+            amount = Math.Round(amount * 100) / 100;
+
             if (user.Id == ctx.UserId)
                 await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                 {
