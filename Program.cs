@@ -1,12 +1,10 @@
-﻿using System.Linq.Expressions;
-using DisCatSharp;
+﻿using DisCatSharp;
 using DisCatSharp.ApplicationCommands;
 using DisCatSharp.ApplicationCommands.Attributes;
 using DisCatSharp.ApplicationCommands.Context;
 using DisCatSharp.Entities;
 using DisCatSharp.Enums;
 using Npgsql;
-using Sentry;
 
 namespace MctBot
 {
