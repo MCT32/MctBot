@@ -1,0 +1,18 @@
+version: "3.1"
+
+services:
+  mctbot:
+    image: mctbot
+    container_name: mctbot
+    environment:
+      - DISCORD_TOKEN=<put token here>
+      - PGHOST=db
+      - PGUSER=mctbot
+      - PGPASSWORD=mctbot
+  
+  db:
+    image: postgres:16.1
+    container_name: mctbot-db
+    environment:
+      - POSTGRES_PASSWORD=mctbot
+      - POSTGRES_USER=mctbot

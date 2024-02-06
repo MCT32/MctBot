@@ -21,6 +21,10 @@ namespace MctBot
 
         static async Task MainAsync()
         {
+            // Dumb fix, sleep for a second to wait for db when using docker
+            // TODO: make better
+            System.Threading.Thread.Sleep(1000);
+
             var postgresBuilder = new NpgsqlDataSourceBuilder();
             postgresBuilder.ConnectionStringBuilder.Host = System.Environment.GetEnvironmentVariable("PGHOST");
 

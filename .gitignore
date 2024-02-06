@@ -38,3 +38,6 @@ msbuild.wrn
 
 # Environment Variables
 .env
+
+# Compose File
+compose.yaml
